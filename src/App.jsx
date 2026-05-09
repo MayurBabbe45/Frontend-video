@@ -1,22 +1,30 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
+import { Provider } from "react-redux";
+import store from "./store/store";
+import Layout from "./components/Layout";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
+    <Provider store={store}>
+      <BrowserRouter>
+        <Toaster position="top-center" toastOptions={{ style: { background: '#333', color: '#fff' } }} />
+        <Routes>
+          
+          <Route path="/" element={<Layout />}>
+            <Route index element={<div className="p-8 text-2xl text-white">Homepage Video Feed Coming Soon...</div>} />
+            
+          </Route>
 
-
-  <h1 class="text-3xl font-bold  text-color-white">
-    Hello world!
-  </h1>
-
-    </>
-  )
+          
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </Routes>
+      </BrowserRouter>
+    </Provider>
+  );
 }
 
-export default App
+export default App;
