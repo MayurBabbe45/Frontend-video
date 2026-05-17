@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axiosInstance from "../utils/axiosInstance";
 import VideoCard from "../components/VideoCard";
 import { FiAlertCircle } from "react-icons/fi";
+import VideoCardSkeleton from "../components/VideoCardSkeleton";
 
 const Home = () => {
   const [videos, setVideos] = useState([]);
@@ -32,8 +33,13 @@ const Home = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-full w-full">
-        <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+      <div className="p-4 md:p-6 lg:p-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-8">
+          {/* Create a quick array of 8 items and map over it to render 8 skeletons */}
+          {[...Array(8)].map((_, index) => (
+            <VideoCardSkeleton key={index} />
+          ))}
+        </div>
       </div>
     );
   }
