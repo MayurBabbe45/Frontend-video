@@ -15,6 +15,8 @@ import UploadVideo from "./pages/UploadVideo";
 import ChannelProfile from "./pages/ChannelProfile";
 import Search from "./pages/Search";
 import History from "./pages/History";
+import Playlists from "./pages/Playlists";
+import PlaylistDetail from "./pages/PlaylistDetail";
 
 // We create an inner component so we can use `useDispatch` (which requires the Redux Provider to exist)
 function AppContent() {
@@ -58,6 +60,8 @@ function AppContent() {
           <Route path="/c/:username" element={<ChannelProfile />} />
           <Route path="/search" element={<Search />} />
           <Route path="/history" element={<History />} />
+          <Route path="/playlists" element={<Playlists />} />
+          <Route path="/playlist/:playlistId" element={<PlaylistDetail />} />
         </Route>
         
         <Route path="/login" element={<Login />} />
