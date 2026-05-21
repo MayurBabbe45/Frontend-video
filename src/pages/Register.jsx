@@ -9,7 +9,6 @@ const Register = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   
-  // State for text inputs
   const [formData, setFormData] = useState({
     fullName: "",
     username: "",
@@ -17,24 +16,22 @@ const Register = () => {
     password: "",
   });
 
-  // State for files and their visual previews
   const [files, setFiles] = useState({ avatar: null, coverImage: null });
   const [previews, setPreviews] = useState({ avatar: null, coverImage: null });
 
-  // Handle standard text inputs
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Handle file selections and generate preview URLs
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     const name = e.target.name;
     
     if (file) {
-      setFiles({ ...files, [name]: file });
-      // Create a temporary local URL so the user can see what they uploaded!
-      setPreviews({ ...previews, [name]: URL.createObjectURL(file) });
+      // 🚨 FIX 1: Use the 'prev' state pattern to ensure we don't overwrite 
+      // the avatar when uploading the cover image!
+      setFiles((prev) => ({ ...prev, [name]: file }));
+      setPreviews((prev) => ({ ...prev, [name]: URL.createObjectURL(file) }));
     }
   };
 
@@ -50,24 +47,24 @@ const Register = () => {
     const loadingToast = toast.loading("Creating your account... Uploading media...");
 
     try {
-      // 🚨 CRITICAL: Because we are sending files, we CANNOT send standard JSON.
-      // We MUST construct a FormData object.
       const data = new FormData();
       data.append("fullName", formData.fullName);
       data.append("username", formData.username.toLowerCase());
       data.append("email", formData.email);
       data.append("password", formData.password);
-      data.append("avatar", files.avatar); // Append the actual file
+      
+      // Append the actual files from state
+      data.append("avatar", files.avatar); 
       
       if (files.coverImage) {
         data.append("coverImage", files.coverImage);
       }
 
-      // Send to backend (Axios automatically sets the multipart/form-data header)
+      // ✅ Let Axios handle the headers and boundaries automatically
       const response = await axiosInstance.post("/users/register", data);
 
       toast.success("Account created successfully!", { id: loadingToast });
-      navigate("/login"); // Send them to login page
+      navigate("/login"); 
 
     } catch (err) {
       toast.error(err.response?.data?.message || "Registration failed", { id: loadingToast });
@@ -78,7 +75,6 @@ const Register = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#0f0f0f] px-4 py-12">
-      {/* Framer Motion wrapper for a smooth fade and slide up animation */}
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -92,7 +88,7 @@ const Register = () => {
 
         <form onSubmit={handleRegister} className="space-y-6">
           
-          {/* --- FILE UPLOAD SECTION (Great UX here) --- */}
+          {/* --- FILE UPLOAD SECTION --- */}
           <div className="flex flex-col md:flex-row gap-6 items-center justify-center p-4 bg-[#141414] rounded-xl border border-zinc-800/50">
             
             {/* Avatar Upload (Required) */}
