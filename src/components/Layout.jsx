@@ -12,7 +12,7 @@ import {
   FiMenu,
   FiUploadCloud,
   FiLogOut,
-  FiClock // 🚨 ADDED THIS
+  FiClock 
 } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 
