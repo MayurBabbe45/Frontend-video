@@ -18,6 +18,7 @@ import History from "./pages/History";
 import Playlists from "./pages/Playlists";
 import PlaylistDetail from "./pages/PlaylistDetail";
 import LikedVideos from "./pages/LikedVideos";
+import Settings from "./pages/Settings";
 
 // We create an inner component so we can use `useDispatch` (which requires the Redux Provider to exist)
 function AppContent() {
@@ -64,6 +65,7 @@ function AppContent() {
           <Route path="/playlists" element={<Playlists />} />
           <Route path="/playlist/:playlistId" element={<PlaylistDetail />} />
           <Route path="/liked" element={<LikedVideos />} />
+          <Route path="/settings" element={<Settings />} />
         </Route>
         
         <Route path="/login" element={<Login />} />

@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom"; // 🚨 Added Link here!
 import { useSelector } from "react-redux";
-import { FiUserPlus, FiCheck, FiTrash2 } from "react-icons/fi"; // 🚨 Added FiTrash2
-import { motion, AnimatePresence } from "framer-motion"; // 🚨 Added for the modal
-import toast from "react-hot-toast"; // 🚨 Added for notifications
+import { FiUserPlus, FiCheck, FiTrash2, FiEdit3 } from "react-icons/fi"; // 🚨 Added FiEdit3
+import { motion, AnimatePresence } from "framer-motion"; 
+import toast from "react-hot-toast"; 
 import axiosInstance from "../utils/axiosInstance";
 import VideoCard from "../components/VideoCard";
 import SubscribeButton from "../components/SubscribeButton";
@@ -15,7 +15,7 @@ const ChannelProfile = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // 🚨 State for the Delete Video Modal
+  // State for the Delete Video Modal
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [videoToDelete, setVideoToDelete] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -44,14 +44,14 @@ const ChannelProfile = () => {
     fetchChannelData();
   }, [username]);
 
-  // 🚨 Function to handle opening the modal
+  // Function to handle opening the modal
   const handleDeleteClick = (e, videoId) => {
     e.preventDefault(); // Prevent accidental navigation
     setVideoToDelete(videoId);
     setDeleteModalOpen(true);
   };
 
-  // 🚨 Function to actually delete the video
+  // Function to actually delete the video
   const confirmDelete = async () => {
     try {
       setIsDeleting(true);
@@ -132,15 +132,19 @@ const ChannelProfile = () => {
               </div>
             </div>
 
+            {/* 🚨 Updated Button Logic Here */}
             {!isOwnProfile ? (
               <SubscribeButton 
                 channelId={channel._id} 
                 initialIsSubscribed={channel.isSubscribed} 
               />
             ) : (
-              <button className="px-6 py-2.5 bg-blue-600/10 text-blue-500 font-bold rounded-full cursor-default border border-blue-600/20">
-                Your Channel
-              </button>
+              <Link 
+                to="/settings"
+                className="flex items-center gap-2 px-6 py-2.5 bg-zinc-800 hover:bg-zinc-700 text-white font-bold rounded-full transition-colors border border-zinc-700"
+              >
+                <FiEdit3 /> Edit Profile
+              </Link>
             )}
           </div>
         </div>
@@ -156,12 +160,10 @@ const ChannelProfile = () => {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-8">
               {videos.map((video) => (
-                // 🚨 Wrapped the VideoCard to allow absolute positioning of the delete button
                 <div key={video._id} className="relative group">
                   
                   <VideoCard video={video} />
                   
-                  {/* 🚨 Show Delete Button ONLY if the logged-in user owns this channel */}
                   {isOwnProfile && (
                     <button
                       onClick={(e) => handleDeleteClick(e, video._id)}
@@ -179,7 +181,7 @@ const ChannelProfile = () => {
         
       </div>
 
-      {/* --- 4. 🚨 CONFIRMATION MODAL --- */}
+      {/* --- 4. CONFIRMATION MODAL --- */}
       <AnimatePresence>
         {deleteModalOpen && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-sm px-4">
